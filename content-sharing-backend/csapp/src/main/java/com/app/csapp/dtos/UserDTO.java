@@ -27,6 +27,7 @@ public class UserDTO {
     @NotBlank(message = "ban can nhap mat khau")
     private String password;
 
+    @JsonProperty("retype_password")
     @NotBlank(message = "ban can nhap lai mat khau")
     private String retypePassword;
 
