@@ -71,7 +71,7 @@ CREATE TABLE picture_tag(
     tag_id INT NOT NULL
 );
 
-
+ALTER TABLE users ADD COLUMN email VARCHAR(30);
 
 ALTER TABLE boards
 ADD CONSTRAINT FK_boards_users FOREIGN KEY (user_id) REFERENCES users(id);
