@@ -28,7 +28,6 @@ public class PictureService implements IPictureService {
 //                        ("Cannot find with tag: " + pictureDTO.getPictureTag()));
         Picture newPicture = Picture.
                 builder()
-                .boardId(pictureDTO.getBoardId())
                 .userId(pictureDTO.getUserId())
                 .imageDescription(pictureDTO.getImageDescription())
                 .imageUrl(pictureDTO.getImageUrl())

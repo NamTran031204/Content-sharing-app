@@ -12,7 +12,7 @@ import lombok.*;
 @Table(name = "picture_tag")
 public class PictureTag {
     @Id
-    @OneToMany
+    //@OneToMany
     @Column(name = "picture_id")
     private long pictureId;
 
