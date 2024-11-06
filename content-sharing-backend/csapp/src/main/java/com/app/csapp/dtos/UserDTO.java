@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
@@ -14,15 +15,21 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotBlank(message = "username cannot be blank")
+    @NotBlank(message = "name cannot be blank")
     private String name;
 
-    @NotBlank(message = "email cannot be blank")
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+
+    @JsonProperty("email")
     private String email;
 
     @NotBlank(message = "username cannot be blank")
     @JsonProperty("username")
     private String userName;
+
+    @JsonProperty("description")
+    private String description;
 
     @NotBlank(message = "ban can nhap mat khau")
     private String password;
@@ -31,9 +38,10 @@ public class UserDTO {
     @NotBlank(message = "ban can nhap lai mat khau")
     private String retypePassword;
 
-    @JsonProperty("profile_picture")
+    //@JsonProperty("profile_picture")
     private String profilePicture;
 
-    @JsonProperty("created_at")
-    private Date createdAt;
+    @JsonProperty("create_time")
+    private LocalDateTime createTime;
+
 }
