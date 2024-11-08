@@ -67,8 +67,10 @@ CREATE TABLE tags(
 );
 
 CREATE TABLE picture_tag(
-	picture_id INT NOT NULL,
-    tag_id INT NOT NULL
+    id int AUTO_INCREMENT PRIMARY KEY,
+    picture_id int,
+    tag_id int,
+    UNIQUE(picture_id, tag_id)
 );
 
 ALTER TABLE users ADD COLUMN email VARCHAR(30);
@@ -105,9 +107,10 @@ ADD CONSTRAINT FK_notifications_users2 FOREIGN KEY (reference_id) REFERENCES use
 -- ADD CONSTRAINT FK_notifications_reacts FOREIGN KEY (TYPE_REACT) REFERENCES REACTS(TYPE_REACT);
 
 ALTER TABLE picture_tag
-ADD CONSTRAINT FK_pictag_picture FOREIGN KEY (picture_id) REFERENCES pictures(id);
+ADD CONSTRAINT fk_pictag_pictures FOREIGN KEY (picture_id) REFERENCES pictures(id);
+
 ALTER TABLE picture_tag
-ADD CONSTRAINT FK_pictag_tag FOREIGN KEY (tag_id) REFERENCES tags(id);
+ADD CONSTRAINT fk_pictag_tags FOREIGN KEY (tag_id) REFERENCES tags(id);
 
 ALTER TABLE pictures
 ADD COLUMN image_description varchar(300);
