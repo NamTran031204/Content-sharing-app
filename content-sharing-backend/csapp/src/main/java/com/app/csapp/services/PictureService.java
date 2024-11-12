@@ -6,6 +6,7 @@ import com.app.csapp.models.Picture;
 import com.app.csapp.models.Tag;
 import com.app.csapp.repositories.PictureRepository;
 import com.app.csapp.repositories.TagRepository;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.config.ConfigDataNotFoundException;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.util.Optional;
 
+@Builder
 @Service
 @RequiredArgsConstructor
 public class PictureService implements IPictureService {
@@ -32,7 +34,6 @@ public class PictureService implements IPictureService {
                 .imageDescription(pictureDTO.getImageDescription())
                 .imageUrl(pictureDTO.getImageUrl())
                 .title(pictureDTO.getTitle())
-                //.pictureTag(existingTag)
                 .build();
         return pictureRepository.save(newPicture);
     }
@@ -45,7 +46,7 @@ public class PictureService implements IPictureService {
     }
 
     @Override
-    public Page<Picture> getAllImageById(PageRequest pageRequest) {
+    public Page<Picture> getAllImage(PageRequest pageRequest) {
         //Lay danh sach trang anh theo page(so trang) va limit(cac phan tu trong 1 trang)
         return pictureRepository.findAll(pageRequest);
     }
@@ -53,9 +54,6 @@ public class PictureService implements IPictureService {
     @Override
     public Picture updateImage(long imageId, PictureDTO pictureDTO) throws Exception {
         Picture exsitingPicture = getImageById(imageId);
-//        Tag existingTag = tagRepository.findById(pictureDTO.getPictureTag()).
-//                orElseThrow(() -> new DataNotFoundException
-//                        ("Cannot find with tag: " + pictureDTO.getPictureTag()));
         exsitingPicture.setTitle(pictureDTO.getTitle());
         exsitingPicture.setImageUrl(pictureDTO.getImageUrl());
         exsitingPicture.setImageDescription(pictureDTO.getImageDescription());

@@ -1,11 +1,11 @@
 package com.app.csapp.dtos;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Getter
@@ -13,22 +13,22 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PictureDTO {
-
+public class BoardDTO {
 
     @NotNull(message = "User ID can not be blank")
     @JsonProperty("user_id")
     private long userId;
 
-    @JsonProperty("image_description")
-    private String imageDescription;
+    @NotNull(message = "Picture ID can not be blank")
+    @JsonProperty("picture_id")
+    private long pictureId;
 
-    @JsonProperty("image_url")
-    private String imageUrl;
+    @NotBlank(message = "Name required")
+    @JsonProperty("board_name")
+    private String boardName;
 
-    @Size(min = 6, max = 100, message = "Title must between 6 and 100 characters")
-    private String title;
 
-    //private MultipartFile file;
+    @JsonProperty("board_description")
+    private String boardDescription;
 
 }

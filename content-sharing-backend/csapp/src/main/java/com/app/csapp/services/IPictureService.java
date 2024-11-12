@@ -10,7 +10,7 @@ import java.awt.*;
 public interface IPictureService {
     Picture createPicture(PictureDTO pictureDTO) throws DataNotFoundException;
     Picture getImageById (long id) throws DataNotFoundException, Exception;
-    Page<Picture> getAllImageById(PageRequest pageRequest);
+    Page<Picture> getAllImage(PageRequest pageRequest);
     Picture updateImage(long imageId, PictureDTO pictureDTO) throws Exception;
     void deleteImage(long id);
     Picture createPictureUrl(Long pictureId, PictureDTO pictureDTO) throws DataNotFoundException;

@@ -8,7 +8,7 @@ import java.util.List;
 public interface ITagService {
     Tag createTag(TagDTO tag);
     Tag getTagById (long id);
-    List<Tag> getAllTagById();
+    List<Tag> getAllTag();
     Tag updateTag(long tagId, TagDTO tag);
     void deleteTag(long id);
 }

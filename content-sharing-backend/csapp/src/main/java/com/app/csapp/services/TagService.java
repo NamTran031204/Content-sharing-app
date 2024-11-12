@@ -25,7 +25,7 @@ public class TagService implements ITagService{
     }
 
     @Override
-    public List<Tag> getAllTagById() {
+    public List<Tag> getAllTag() {
         return tagRepository.findAll();
     }
 

@@ -1,5 +1,6 @@
 package com.app.csapp.models;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,12 +12,17 @@ import lombok.*;
 @Builder
 @Table(name = "picture_tag")
 public class PictureTag {
-    @Id
-    //@OneToMany
-    @Column(name = "picture_id")
-    private long pictureId;
 
     @Id
-    @Column(name = "tag_id")
-    private long tagId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
+
+    @OneToOne
+    @JoinColumn(name = "picture_id")
+    private Picture pictureId;
+
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tagId;
 }

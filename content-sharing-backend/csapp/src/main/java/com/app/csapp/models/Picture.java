@@ -20,7 +20,6 @@ public class Picture extends BaseEntity {
 
 //    @Column(name = "board_id", nullable = false)
 //    private long boardId;
-
     @Column(name = "user_id", nullable = false)
     private long userId;
 

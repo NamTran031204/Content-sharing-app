@@ -1,44 +1,49 @@
 package com.app.csapp.controllers;
 
+import com.app.csapp.dtos.PictureTagDTO;
 import com.app.csapp.dtos.TagDTO;
+import com.app.csapp.exceptions.DataNotFoundException;
+import com.app.csapp.models.PictureTag;
 import com.app.csapp.models.Tag;
-import com.app.csapp.services.TagService;
+import com.app.csapp.services.PictureTagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/tags")
+@RequestMapping("api/v1/pictureTags")
 //@Validated
 @RequiredArgsConstructor
-public class TagController {
-
-    private final TagService tagService;
-
+public class PictureTagController {
+    private final PictureTagService pictureTagService;
     @PostMapping("")
     public ResponseEntity<?> createTags(
-            @Valid @RequestBody TagDTO tagDTO,
+
+            @Valid @RequestBody PictureTagDTO pictureTagDTO,
             BindingResult result){
         if(result.hasErrors()){
-            List<String> errorMessages = result.getFieldErrors().stream().map(FieldError :: getDefaultMessage).toList();
+            List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        tagService.createTag(tagDTO);
-        return ResponseEntity.ok("Insert Tag Successfully");
+        try {
+            pictureTagService.createPictureTag(pictureTagDTO);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/tags
-    public ResponseEntity<List<Tag>> getAllTags(
+    public ResponseEntity<List<PictureTag>> getAllTags(
             @RequestParam("page") int page,
             @RequestParam("limit") int limit
     ){
-        List<Tag> tags = tagService.getAllTag();
+        List<PictureTag> tags = pictureTagService.getAllPictureTag();
         return ResponseEntity.ok(tags);
     }
 
@@ -46,15 +51,14 @@ public class TagController {
     @PutMapping("/{id}")
     public ResponseEntity<String> createTag(
             @PathVariable Long id,
-            @Valid @RequestBody TagDTO tagDTO
+            @Valid @RequestBody PictureTagDTO pictureTagDTO
     ){
-        tagService.updateTag(id, tagDTO);
+        pictureTagService.updatePictureTag(id, pictureTagDTO);
         return ResponseEntity.ok("Update Tags successfully");
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTags(@PathVariable Long id){
-        tagService.deleteTag(id);
+        pictureTagService.deleteTag(id);
         return ResponseEntity.ok("Delete successfully");
     }
-
 }

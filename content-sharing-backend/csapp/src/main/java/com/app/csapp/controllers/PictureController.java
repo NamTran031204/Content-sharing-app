@@ -5,6 +5,9 @@ import com.app.csapp.models.Picture;
 import com.app.csapp.services.IPictureService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,13 +52,18 @@ public class PictureController {
 
     }
 
+
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPicture(
+            @Valid @ModelAttribute PictureDTO pictureDTO,
             @PathVariable("id") Long pictureId,
-            @ModelAttribute MultipartFile file
+            @RequestParam("file") MultipartFile file
     ){
         //MultipartFile file = pictureDTO.getFile();
         try {
+            if (file == null || file.isEmpty()) {
+                return ResponseEntity.badRequest().body("File cannot be null or empty");
+            }
             Picture existingPicture = pictureService.getImageById(pictureId);
             if(file != null){
                 //Kiem tra kich thuoc file va dinh dang
@@ -67,10 +75,18 @@ public class PictureController {
                     return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an Image");
                 }
                 String filename = storeFile(file);
-                Picture pictureUrl = pictureService.createPictureUrl(
+                // Update the existing picture with the new image URL and details
+                pictureDTO.setImageUrl(filename);
+                Picture updatedPicture = pictureService.updateImage(
                         existingPicture.getId(),
+//                        pictureDTO
                         PictureDTO.builder()
-                                .imageUrl(filename).build());
+                                .imageUrl(filename)
+                                .imageDescription(existingPicture.getImageDescription())
+                                .title(existingPicture.getTitle())// Update as needed
+                                .build()
+                );
+
             }
             return ResponseEntity.ok("ok");
         } catch (Exception e) {
@@ -95,10 +111,15 @@ public class PictureController {
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/pictures
-    public ResponseEntity<String> getAllImage(){
-//        @RequestParam("Page") int page;
-//        @RequestParam("Limit") int limit;
-        return ResponseEntity.ok("getAllImage");
+    public ResponseEntity<List<Picture>> getAllImage(
+            @RequestParam("Page") int page,
+            @RequestParam("Limit") int limit
+    ){
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createTime").descending());
+        Page<Picture> picturePage = pictureService.getAllImage(pageRequest);
+        int totalPages = picturePage.getTotalPages();
+        List<Picture> pictures = picturePage.getContent();
+        return ResponseEntity.ok(pictures);
     }
 
 
@@ -108,6 +129,7 @@ public class PictureController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteImage(@PathVariable Long id){
+        pictureService.deleteImage(id);
         return ResponseEntity.ok(String.format("Delete Image id = %d",id));
     }
 
