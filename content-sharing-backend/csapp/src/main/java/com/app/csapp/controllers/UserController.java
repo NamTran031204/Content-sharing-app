@@ -2,15 +2,16 @@ package com.app.csapp.controllers;
 
 import com.app.csapp.dtos.*;
 
-import com.app.csapp.models.User;
-import com.app.csapp.services.IUserService;
+import com.app.csapp.exceptions.DataNotFoundException;
+import com.app.csapp.models.*;
+import com.app.csapp.repositories.UserRepository;
+import com.app.csapp.services.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -164,10 +165,12 @@ public class UserController {
             @Valid @PathVariable("id") Long userId
     ){
         try {
-            // nghiên cứu sau :))
-            return null;
+            User existingUser = userService.getUserById(userId);
+            userService.deleteUser(userId);
+            return ResponseEntity.ok("xoa user thanh cong");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

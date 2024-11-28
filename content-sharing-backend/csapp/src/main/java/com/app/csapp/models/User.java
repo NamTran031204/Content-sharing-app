@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "users")
 @Entity
@@ -39,4 +40,9 @@ public class User extends BaseEntity {
     @Column(name = "profile_picture", length = 200)
     private String profilePicture;
 
+//    @OneToMany(mappedBy = "follower_id", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Follower> followerUsers;
+//
+//    @OneToMany(mappedBy = "following_id", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Follower> followingUsers;
 }

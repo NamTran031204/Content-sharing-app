@@ -17,12 +17,20 @@ public class Follower {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "follower_id")
-    private long followerId;
+    @ManyToOne
+    @JoinColumn(name = "follower_id", nullable = false)
+//    @Column(name = "follower_id")
+    private User follower;
 
-    @Column(name = "following_id")
-    private long followingId;
+    @ManyToOne
+    @JoinColumn(name = "following_id", nullable = false)
+//    @Column(name = "following_id")
+    private User following;
 
     @Column(name = "followed_at")
     private LocalDateTime followedAt;
+    @PrePersist
+    protected void onCreate() {
+        followedAt = LocalDateTime.now();
+    }
 }

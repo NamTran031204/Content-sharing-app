@@ -5,11 +5,15 @@ import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.exceptions.SamePasswordException;
 import com.app.csapp.models.User;
 import com.app.csapp.repositories.UserRepository;
+import com.app.csapp.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +56,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserById(long userId) {
+    public User getUserById(long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -69,12 +73,22 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Page<UserResponse> getAllUser(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest).map(user -> UserResponse.fromUser(user));
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
     public User updateUser(long userId, UserDTO userDTO) throws DataNotFoundException {
         User existingUser = getUserById(userId);
         if(userDTO.getUserName() != null)
             existingUser.setUserName(userDTO.getUserName());
-//        if(userDTO.getUserDescription() != null)
-//            existingUser.setUserDescription(userDTO.getUserDescription());
+        if(userDTO.getDescription() != null)
+            existingUser.setDescription(userDTO.getDescription());
 
         if(userDTO.getProfilePicture() != null)
             existingUser.setProfilePicture(userDTO.getProfilePicture());

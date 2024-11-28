@@ -24,7 +24,6 @@ public class BaseEntity{
     @PrePersist
     protected void onCreate() {
         createTime = LocalDateTime.now();
-        //updateTime = LocalDateTime.now();
     }
 
     @PreUpdate
