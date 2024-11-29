@@ -88,10 +88,12 @@ public class PictureController {
                 );
 
             }
-            return ResponseEntity.ok("ok");
+
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+        return ResponseEntity.ok(pictureDTO.getImageUrl());
     }
 
     private String storeFile(MultipartFile file) throws IOException{

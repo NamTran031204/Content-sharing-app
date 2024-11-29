@@ -26,16 +26,18 @@ public class BoardController {
     public ResponseEntity<?> createTags(
             @Valid @RequestBody BoardDTO boardDTO,
             BindingResult result){
+        try {
         if(result.hasErrors()){
             List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        try {
-            boardService.createBoard(boardDTO);
+
+            Board newBoard = boardService.createBoard(boardDTO);
+            return ResponseEntity.ok(newBoard);
         } catch (DataNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok("Insert Board Successfully");
+
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/boards

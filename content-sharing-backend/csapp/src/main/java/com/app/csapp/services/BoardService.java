@@ -6,10 +6,8 @@ import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Board;
 import com.app.csapp.models.Picture;
-import com.app.csapp.repositories.BoardRespository;
+import com.app.csapp.repositories.BoardRepository;
 import com.app.csapp.repositories.PictureRepository;
-import com.app.csapp.repositories.PictureTagRepository;
-import com.app.csapp.repositories.TagRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ import java.util.List;
 public class BoardService implements IBoardService {
 
     private final PictureRepository pictureRepository;
-    private final BoardRespository boardRespository;
+    private final BoardRepository boardRespository;
 
     @Override
     public Board createBoard(BoardDTO boardDTO) throws DataNotFoundException {

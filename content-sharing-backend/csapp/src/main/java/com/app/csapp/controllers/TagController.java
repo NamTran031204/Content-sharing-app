@@ -29,8 +29,8 @@ public class TagController {
             List<String> errorMessages = result.getFieldErrors().stream().map(FieldError :: getDefaultMessage).toList();
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        tagService.createTag(tagDTO);
-        return ResponseEntity.ok("Insert Tag Successfully");
+        Tag tag = tagService.createTag(tagDTO);
+        return ResponseEntity.ok(tag);
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/tags

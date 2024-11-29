@@ -51,7 +51,7 @@ public class PictureTagService implements IPictureTagService {
     @Override
     public PictureTag getPictureTagById(long id) throws DataNotFoundException {
         return pictureTagRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Cannot get the picture with the tag: " + id));
+                .orElseThrow(() -> new DataNotFoundException("Cannot get the picture tag: " + id));
     }
 
     @Override

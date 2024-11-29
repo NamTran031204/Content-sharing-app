@@ -26,25 +26,26 @@ public class PictureTagController {
 
             @Valid @RequestBody PictureTagDTO pictureTagDTO,
             BindingResult result){
-        if(result.hasErrors()){
+        try{
+         if(result.hasErrors()){
             List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        try {
-            pictureTagService.createPictureTag(pictureTagDTO);
+            List<PictureTag> pictureTag = pictureTagService.createPictureTag(pictureTagDTO);
+            return ResponseEntity.ok(pictureTag);
         } catch (DataNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok("ok");
+
     }
 
-    @GetMapping("") //http://localhost:8088/api/v1/tags
+    @GetMapping("/picture/{id}") //http://localhost:8088/api/v1/tags
     public ResponseEntity<List<PictureTag>> getAllTags(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit
+//            @RequestParam("page") int page,
+//            @RequestParam("limit") int limit
     ){
-        List<PictureTag> tags = pictureTagService.getAllPictureTag();
-        return ResponseEntity.ok(tags);
+        List<PictureTag> pictureTag = pictureTagService.getAllPictureTag();
+        return ResponseEntity.ok(pictureTag);
     }
 
 

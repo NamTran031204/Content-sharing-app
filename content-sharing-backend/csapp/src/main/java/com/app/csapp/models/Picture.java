@@ -18,12 +18,10 @@ public class Picture extends BaseEntity {
     @Column(name = "id")
     private long id;
 
-//    @Column(name = "board_id", nullable = false)
-//    private long boardId;
     @Column(name = "user_id", nullable = false)
     private long userId;
 
-    @Column(name = "image_url", nullable = false, length = 200)
+    @Column(name = "image_url", nullable = false, length = 400)
     private String imageUrl;
 
     @Column(name = "title", nullable = true, length = 100)
