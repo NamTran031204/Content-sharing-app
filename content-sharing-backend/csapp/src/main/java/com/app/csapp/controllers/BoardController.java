@@ -2,7 +2,6 @@ package com.app.csapp.controllers;
 
 
 import com.app.csapp.dtos.BoardDTO;
-import com.app.csapp.dtos.TagDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Board;
 import com.app.csapp.services.BoardService;
