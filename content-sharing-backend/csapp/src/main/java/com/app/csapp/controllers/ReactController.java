@@ -1,11 +1,10 @@
 package com.app.csapp.controllers;
 
-import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.dtos.ReactDTO;
-import com.app.csapp.enums.ReactEnums;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.React;
 import com.app.csapp.services.ReactService;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/reacts")
@@ -22,17 +20,16 @@ import java.util.Map;
 
 public class ReactController {
     private final ReactService reactService;
-    @PostMapping("/{id}")
+    @PostMapping("")
     public ResponseEntity<?> createReact(
             @Valid @RequestBody ReactDTO reactDTO,
             BindingResult result
     ){
-    try {
-
-        if(result.hasErrors()){
-            List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
+        try {
+            if(result.hasErrors()){
+                List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
 
             React newReact = reactService.createReact(reactDTO);
 
@@ -44,12 +41,36 @@ public class ReactController {
         } catch (DataNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{picture_id}")
+    public ResponseEntity<?> deleteReact(
+            @Valid @RequestBody ReactDTO reactDTO
+    ){
+        try{
+            reactService.deteleReact(reactDTO);
+            return ResponseEntity.ok("deleted");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 
+    @GetMapping("/{picture_id}")
+    public ResponseEntity<?> getReact(
+            @Valid @RequestBody ReactDTO reactDTO,
+            BindingResult result
+    ){
+        try{
+            if(result.hasErrors()){
+                List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
 
-
-
-
+            return ResponseEntity.ok("  ");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

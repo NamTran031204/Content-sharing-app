@@ -23,20 +23,19 @@ public class PictureTagController {
     private final PictureTagService pictureTagService;
     @PostMapping("")
     public ResponseEntity<?> createTags(
-
             @Valid @RequestBody PictureTagDTO pictureTagDTO,
-            BindingResult result){
+            BindingResult result
+    ){
         try{
-         if(result.hasErrors()){
-            List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
+            if(result.hasErrors()){
+                List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
             List<PictureTag> pictureTag = pictureTagService.createPictureTag(pictureTagDTO);
             return ResponseEntity.ok(pictureTag);
         } catch (DataNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
     @GetMapping("/picture/{id}") //http://localhost:8088/api/v1/tags

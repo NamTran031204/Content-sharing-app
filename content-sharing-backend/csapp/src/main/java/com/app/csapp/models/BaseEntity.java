@@ -18,16 +18,8 @@ public class BaseEntity{
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
-//    @Column(name = "update_at")
-//    private LocalDateTime updateTime;
-
     @PrePersist
     protected void onCreate() {
         createTime = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        //updateTime = LocalDateTime.now();
     }
 }

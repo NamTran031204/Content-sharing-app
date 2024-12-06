@@ -3,6 +3,7 @@ package com.app.csapp.dtos;
 
 import com.app.csapp.enums.ReactEnums;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class ReactDTO {
     @NotNull(message = "Picture id cannot be null")
     private Long pictureId;
 
+    @NotBlank
     @JsonProperty("type_react")
     private ReactEnums typeReact;
 

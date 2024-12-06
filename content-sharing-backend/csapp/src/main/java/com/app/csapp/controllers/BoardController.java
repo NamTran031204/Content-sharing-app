@@ -26,10 +26,10 @@ public class BoardController {
             @Valid @RequestBody BoardDTO boardDTO,
             BindingResult result){
         try {
-        if(result.hasErrors()){
-            List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
+            if(result.hasErrors()){
+                List<String> errorMessages = result.getFieldErrors().stream().map(FieldError:: getDefaultMessage).toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
 
             Board newBoard = boardService.createBoard(boardDTO);
             return ResponseEntity.ok(newBoard);

@@ -18,14 +18,15 @@ public class React extends  BaseEntity{
     @Column(name = "id")
     private long id;
 
-    @Column(name = "user_id", nullable = false)
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userId;
 
     @ManyToOne
     @JoinColumn(name = "picture_id", nullable = false)
-    private Picture pictureId;
+    private Picture picture;
 
-    @Column(name = "type_react")
+    @Column(name = "type_react", nullable = false)
     private ReactEnums typeReact;
 
     @Column(name = "content", nullable = true)

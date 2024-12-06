@@ -18,8 +18,9 @@ public class Picture extends BaseEntity {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "user_id", nullable = false)
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userId;
 
     @Column(name = "image_url", nullable = false, length = 400)
     private String imageUrl;

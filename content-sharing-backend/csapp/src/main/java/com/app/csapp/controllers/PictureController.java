@@ -33,9 +33,7 @@ public class PictureController {
     @PostMapping("")
     public ResponseEntity<?> createTags(
             @Valid @RequestBody PictureDTO pictureDTO,
-            //@ModelAttribute MultipartFile file,
             BindingResult result
-            //@RequestPart("file")MultipartFile file
     ){
         try{
             if(result.hasErrors()){
@@ -43,7 +41,6 @@ public class PictureController {
                 return ResponseEntity.badRequest().body(errorMessages);
             }
             Picture newPicture = pictureService.createPicture(pictureDTO);
-
             return ResponseEntity.ok(newPicture);
         }
         catch (Exception e){
@@ -53,10 +50,10 @@ public class PictureController {
     }
 
 
-    @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "uploads/{picture_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPicture(
             @Valid @ModelAttribute PictureDTO pictureDTO,
-            @PathVariable("id") Long pictureId,
+            @PathVariable("picture_id") Long pictureId,
             @RequestParam("file") MultipartFile file
     ){
         //MultipartFile file = pictureDTO.getFile();
@@ -65,35 +62,33 @@ public class PictureController {
                 return ResponseEntity.badRequest().body("File cannot be null or empty");
             }
             Picture existingPicture = pictureService.getImageById(pictureId);
-            if(file != null){
-                //Kiem tra kich thuoc file va dinh dang
-                if(file.getSize() > 10 * 1024 * 1024){
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Maximum size is 10MB only");
-                }
-                String contentFile = file.getContentType();
-                if(contentFile == null || !contentFile.startsWith("image/")){
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an Image");
-                }
-                String filename = storeFile(file);
-                // Update the existing picture with the new image URL and details
-                pictureDTO.setImageUrl(filename);
-                Picture updatedPicture = pictureService.updateImage(
-                        existingPicture.getId(),
-//                        pictureDTO
-                        PictureDTO.builder()
-                                .imageUrl(filename)
-                                .imageDescription(existingPicture.getImageDescription())
-                                .title(existingPicture.getTitle())// Update as needed
-                                .build()
-                );
 
+            //Kiem tra kich thuoc file va dinh dang
+            if(file.getSize() > 10 * 1024 * 1024){
+                return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Maximum size is 10MB only");
             }
 
+            String contentFile = file.getContentType();
+            if(contentFile == null || !contentFile.startsWith("image/")){
+                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an Image");
+            }
 
+            String filename = storeFile(file);
+            // Update the existing picture with the new image URL and details
+            pictureDTO.setImageUrl(filename);
+            Picture updatedPicture = pictureService.updateImage(
+                    existingPicture.getId(),
+//                        pictureDTO
+                    PictureDTO.builder()
+                            .imageUrl(filename)
+                            .imageDescription(existingPicture.getImageDescription())
+                            .title(existingPicture.getTitle())// Update as needed
+                            .build()
+            );
+            return ResponseEntity.ok(pictureDTO.getImageUrl());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok(pictureDTO.getImageUrl());
     }
 
     private String storeFile(MultipartFile file) throws IOException{
@@ -126,8 +121,14 @@ public class PictureController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> updateImage(@PathVariable Long id){
-        return ResponseEntity.ok("Get Image id = " + id);
+    public ResponseEntity<?> getImage(@PathVariable("id") Long id){
+        try {
+            Picture picture = pictureService.getImageById(id);
+            return ResponseEntity.ok(picture);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteImage(@PathVariable Long id){
