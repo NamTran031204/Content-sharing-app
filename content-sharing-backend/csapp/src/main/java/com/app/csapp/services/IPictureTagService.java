@@ -11,5 +11,5 @@ public interface IPictureTagService {
     PictureTag getPictureTagById (long id) throws DataNotFoundException;
     List<PictureTag> getAllPictureTag();
     PictureTag updatePictureTag(long tagId, PictureTagDTO pictureTagDTO);
-    void deleteTag(long id);
+    void deletePictureTag(long id);
 }

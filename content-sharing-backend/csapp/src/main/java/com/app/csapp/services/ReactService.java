@@ -1,8 +1,6 @@
 package com.app.csapp.services;
 
-import com.app.csapp.dtos.PictureDTO;
 import com.app.csapp.dtos.ReactDTO;
-import com.app.csapp.dtos.UserDTO;
 import com.app.csapp.enums.ReactEnums;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Picture;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +48,7 @@ public class ReactService implements IReactService{
             reactDTO.setContent("No content");
         }
 
-        React newReact = React
+        React newLike = React
                 .builder()
                 .user(existingUser)
                 .picture(existingPicture)
@@ -59,7 +56,8 @@ public class ReactService implements IReactService{
                 .content(reactDTO.getContent())
                 .build();
 
-        return reactRepository.save(newReact);
+
+        return reactRepository.save(newLike);
     }
 
     @Override
@@ -71,15 +69,12 @@ public class ReactService implements IReactService{
     }
 
     @Override
-    public void deteleReact(ReactDTO reactDTO) throws DataNotFoundException{
+    public void deteleReact(ReactDTO reactDTO) throws DataNotFoundException {
         User existingUser = userRepository.findById(reactDTO.getUserId())
                 .orElseThrow(() -> new DataNotFoundException("set"));
         Picture existingPicture = pictureRepository.findById(reactDTO.getPictureId())
                 .orElseThrow(() -> new DataNotFoundException("get"));
-
         Long reactId = reactRepository.getIdByUserAndPictureAndTypeReact(existingUser, existingPicture, reactDTO.getTypeReact());
         reactRepository.deleteById(reactId);
     }
-
-
 }

@@ -20,7 +20,7 @@ public class React extends  BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "picture_id", nullable = false)

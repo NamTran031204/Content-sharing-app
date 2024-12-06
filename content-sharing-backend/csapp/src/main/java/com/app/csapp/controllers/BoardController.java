@@ -22,7 +22,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     @PostMapping("")
-    public ResponseEntity<?> createTags(
+    public ResponseEntity<?> createBoard(
             @Valid @RequestBody BoardDTO boardDTO,
             BindingResult result){
         try {
@@ -40,7 +40,7 @@ public class BoardController {
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/boards
-    public ResponseEntity<List<Board>> getAllTags(
+    public ResponseEntity<List<Board>> getAllBoard(
 //            @RequestParam("page") int page,
 //            @RequestParam("limit") int limit
     ){
@@ -50,7 +50,7 @@ public class BoardController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> createTag(
+    public ResponseEntity<String> updateBoard(
             @PathVariable Long id,
             @Valid @RequestBody BoardDTO boardDTO
     ){
@@ -58,7 +58,7 @@ public class BoardController {
         return ResponseEntity.ok("Update Tags successfully");
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTags(@PathVariable Long id){
+    public ResponseEntity<String> deleteBoard(@PathVariable Long id){
         boardService.deleteBoard(id);
         return ResponseEntity.ok("Delete successfully");
     }

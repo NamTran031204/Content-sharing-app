@@ -22,7 +22,7 @@ import java.util.List;
 public class PictureTagController {
     private final PictureTagService pictureTagService;
     @PostMapping("")
-    public ResponseEntity<?> createTags(
+    public ResponseEntity<?> createPictureTags(
             @Valid @RequestBody PictureTagDTO pictureTagDTO,
             BindingResult result
     ){
@@ -39,7 +39,7 @@ public class PictureTagController {
     }
 
     @GetMapping("/picture/{id}") //http://localhost:8088/api/v1/tags
-    public ResponseEntity<List<PictureTag>> getAllTags(
+    public ResponseEntity<List<PictureTag>> getAllPictureTags(
 //            @RequestParam("page") int page,
 //            @RequestParam("limit") int limit
     ){
@@ -49,7 +49,7 @@ public class PictureTagController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> createTag(
+    public ResponseEntity<String> updatePictureTags(
             @PathVariable Long id,
             @Valid @RequestBody PictureTagDTO pictureTagDTO
     ){
@@ -57,7 +57,7 @@ public class PictureTagController {
         return ResponseEntity.ok("Update Tags successfully");
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTags(@PathVariable Long id){
+    public ResponseEntity<String> deletePictureTags(@PathVariable Long id){
         pictureTagService.deleteTag(id);
         return ResponseEntity.ok("Delete successfully");
     }

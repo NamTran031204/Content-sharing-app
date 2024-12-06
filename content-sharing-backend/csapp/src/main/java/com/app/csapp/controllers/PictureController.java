@@ -31,7 +31,7 @@ public class PictureController {
     private final IPictureService pictureService;
 
     @PostMapping("")
-    public ResponseEntity<?> createTags(
+    public ResponseEntity<?> createPicture(
             @Valid @RequestBody PictureDTO pictureDTO,
             BindingResult result
     ){
