@@ -40,7 +40,7 @@ public class ReactService implements IReactService{
         }
 
         if(reactDTO.getTypeReact() == ReactEnums.SHARE){
-            String shareLink = baseUrl + "/picture/" + reactDTO.getPictureId();
+            String shareLink = baseUrl + "/picture/" + existingPicture.getImageUrl();
             reactDTO.setContent(shareLink);
         }
 

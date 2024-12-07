@@ -65,7 +65,7 @@ public class PictureTagService implements IPictureTagService {
     }
 
     @Override
-    public void deletePictureTag(long id) {
+    public void deletePictureTag(Long id) {
         pictureRepository.deleteById(id);
     }
 }

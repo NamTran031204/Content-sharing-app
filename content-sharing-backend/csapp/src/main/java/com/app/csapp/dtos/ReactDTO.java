@@ -23,7 +23,7 @@ public class ReactDTO {
     @NotNull(message = "Picture id cannot be null")
     private Long pictureId;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("type_react")
     private ReactEnums typeReact;
 

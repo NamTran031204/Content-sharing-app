@@ -17,8 +17,9 @@ public class Board extends BaseEntity{
     @Column(name = "id")
     private long id;
 
-    @Column(name = "user_id", nullable = false)
-    private long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userId;
 
     @Column(name = "board_name", nullable = false, length = 200)
     private String boardName;

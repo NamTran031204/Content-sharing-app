@@ -31,7 +31,7 @@ public class PictureService implements IPictureService {
     public Picture createPicture(PictureDTO pictureDTO) throws DataNotFoundException {
         User existingUser = userRepository.findById(pictureDTO.getUserId()).
                 orElseThrow(() -> new DataNotFoundException
-                        ("Cannot find with tag: " + pictureDTO.getUserId()));
+                        ("Cannot find with user: " + pictureDTO.getUserId()));
         Picture newPicture = Picture.
                 builder()
                 .userId(existingUser)

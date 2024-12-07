@@ -58,7 +58,7 @@ public class PictureTagController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePictureTags(@PathVariable Long id){
-        pictureTagService.deleteTag(id);
+        pictureTagService.deletePictureTag(id);
         return ResponseEntity.ok("Delete successfully");
     }
 }
