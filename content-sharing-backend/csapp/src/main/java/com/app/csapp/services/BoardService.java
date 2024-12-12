@@ -6,6 +6,7 @@ import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Board;
 import com.app.csapp.models.Picture;
+import com.app.csapp.models.Tag;
 import com.app.csapp.models.User;
 import com.app.csapp.repositories.BoardRepository;
 import com.app.csapp.repositories.PictureRepository;
@@ -34,33 +35,54 @@ public class BoardService implements IBoardService {
 
         Board newBoard = Board.
                 builder()
-                .userId(existingUser)
+                .user(existingUser)
                 .boardName(boardDTO.getBoardName())
                 .boardDescription(boardDTO.getBoardDescription())
-                .pictureId(existingPicture)
+                .picture(existingPicture)
                 .build();
         return boardRespository.save(newBoard);
 
     }
 
+
     @Override
-    public Board getBoardById(long id) throws DataNotFoundException {
-        return boardRespository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Cannot get the board with id: " + id));
+    public List<Board> getBoardOfUser(Long userId, String boardName) throws DataNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new DataNotFoundException("Cannot find user"));
+        Board board = boardRespository.findBoardByName(boardName)
+                .orElseThrow(()->new DataNotFoundException("Cannot find board with name: " + boardName));
+        return boardRespository.findAllBoardOfUser(user.getId(), boardName);
     }
 
     @Override
-    public List<Board> getAllBoard() {
-        return boardRespository.findAll();
+    public int updateBoardName(Long userId, String boardName, BoardDTO boardDTO) throws DataNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new DataNotFoundException("Cannot find user"));
+        Board board = boardRespository.findBoardByName(boardName)
+                .orElseThrow(()->new DataNotFoundException("Cannot find board with name: " + boardName));
+        return boardRespository.updateBoardName(userId, boardName, boardDTO.getBoardName());
     }
 
     @Override
-    public Board updateBoard(long boardId, BoardDTO board) {
-        return null;
+    public void deletePictureOutOfBoard(Long userId,Long pictureId, String boardName) throws DataNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new  DataNotFoundException
+                        ("Cannot find user with id: " + userId));
+        Board board = boardRespository.findBoardByName(boardName)
+                .orElseThrow(()->new DataNotFoundException("Cannot find board with name: " + boardName));
+        Picture existingPicture = pictureRepository.findById(pictureId)
+                .orElseThrow(()-> new DataNotFoundException
+                        ("Cannot find picture with id: " + pictureId));
+        boardRespository.deletePictureOfBoard(userId, pictureId, boardName);
     }
 
     @Override
-    public void deleteBoard(long id) {
-        boardRespository.deleteById(id);
+    public void deleteBoardByUser(Long userId, String boardName ) throws DataNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new  DataNotFoundException
+                        ("Cannot find user with id: " + userId));
+        Board board = boardRespository.findBoardByName(boardName)
+                .orElseThrow(()->new DataNotFoundException("Cannot find board with name: " + boardName));
+        boardRespository.deleteBoardOfUser(userId, boardName);
     }
 }

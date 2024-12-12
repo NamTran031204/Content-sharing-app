@@ -15,11 +15,11 @@ public class Board extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @Column(name = "board_name", nullable = false, length = 200)
     private String boardName;
@@ -29,5 +29,5 @@ public class Board extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "picture_id")
-    private Picture pictureId;
+    private Picture picture;
 }

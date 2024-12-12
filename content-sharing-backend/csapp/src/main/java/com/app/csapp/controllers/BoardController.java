@@ -39,27 +39,61 @@ public class BoardController {
 
     }
 
-    @GetMapping("") //http://localhost:8088/api/v1/boards
-    public ResponseEntity<List<Board>> getAllBoard(
-//            @RequestParam("page") int page,
-//            @RequestParam("limit") int limit
+    @GetMapping("/user/{userId}/board/{name}")
+    public ResponseEntity<?> getAllBoard(
+            @PathVariable("userId") Long userId,
+            @PathVariable("name") String name
     ){
-        List<Board> board = boardService.getAllBoard();
-        return ResponseEntity.ok(board);
+        try{
+            List<Board> board = boardService.getBoardOfUser(userId, name);
+            return ResponseEntity.ok(board);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/{userId}/board/{boardName}")
     public ResponseEntity<String> updateBoard(
-            @PathVariable Long id,
+            @PathVariable("userId") Long userId,
+            @PathVariable("boardName") String boardName,
             @Valid @RequestBody BoardDTO boardDTO
     ){
-        //tagService.updateTag(id, tagDTO);
-        return ResponseEntity.ok("Update Tags successfully");
+        try{
+            boardService.updateBoardName(userId, boardName, boardDTO);
+            return ResponseEntity.ok("Update board name successfully");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBoard(@PathVariable Long id){
-        boardService.deleteBoard(id);
-        return ResponseEntity.ok("Delete successfully");
+
+
+    @DeleteMapping("/user/{userId}/picture/{pictureId}/board/{boardName}")
+    public ResponseEntity<String> deletePictureOutOfBoard(
+            @PathVariable("userId") Long userId,
+            @PathVariable("pictureId") Long pictureId,
+            @PathVariable("boardName") String boardName
+    ){
+        try{
+            boardService.deletePictureOutOfBoard(userId, pictureId, boardName);
+            return ResponseEntity.ok("Delete picture out of board successfully");
+        } catch (DataNotFoundException e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/user/{userId}/board/{boardName}")
+    public ResponseEntity<String> deleteBoardOfUser(
+            @PathVariable("userId") Long userId,
+            @PathVariable("boardName") String boardName
+    ){
+        try{
+            boardService.deleteBoardByUser(userId, boardName);
+            return ResponseEntity.ok("Delete board successfully");
+        } catch (DataNotFoundException e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

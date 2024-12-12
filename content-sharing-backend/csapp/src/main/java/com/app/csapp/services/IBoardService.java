@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface IBoardService {
     Board createBoard(BoardDTO board) throws DataNotFoundException;
-    Board getBoardById (long id) throws DataNotFoundException;
-    List<Board> getAllBoard();
-    Board updateBoard(long boardId, BoardDTO board);
-    void deleteBoard(long id);
+    List<Board> getBoardOfUser(Long userId, String boardName) throws DataNotFoundException;
+    int updateBoardName(Long userId ,String boardName, BoardDTO boardDTO) throws DataNotFoundException;
+    void deleteBoardByUser(Long userId, String boardName ) throws DataNotFoundException;
+    void deletePictureOutOfBoard(Long userId,Long pictureId, String boardName) throws DataNotFoundException;
 }

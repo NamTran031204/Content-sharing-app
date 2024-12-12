@@ -2,7 +2,6 @@ package com.app.csapp.services;
 
 
 import com.app.csapp.dtos.PictureTagDTO;
-import com.app.csapp.dtos.TagDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Picture;
 import com.app.csapp.models.PictureTag;
@@ -29,7 +28,7 @@ public class PictureTagService implements IPictureTagService {
         Picture existingPicture = pictureRepository.findById(pictureTagDTO.getPictureId())
                 .orElseThrow(() -> new DataNotFoundException("Cannot find picture with ID: " + pictureTagDTO.getPictureId()));
 
-        List<Long> tagIds = Collections.singletonList(pictureTagDTO.getTagId());  // Assuming PictureTagDTO has a list of tag IDs
+        List<Long> tagIds = Collections.singletonList(pictureTagDTO.getTagId());
         List<PictureTag> pictureTags = new ArrayList<>();
 
         for (Long tagId : tagIds) {
@@ -37,8 +36,8 @@ public class PictureTagService implements IPictureTagService {
                     .orElseThrow(() -> new DataNotFoundException("Cannot find tag with ID: " + tagId));
 
             PictureTag newPictureTag = PictureTag.builder()
-                    .pictureId(existingPicture)
-                    .tagId(tag)
+                    .picture(existingPicture)
+                    .tag(tag)
                     .build();
 
             pictureTagRepository.save(newPictureTag);
@@ -54,18 +53,34 @@ public class PictureTagService implements IPictureTagService {
                 .orElseThrow(() -> new DataNotFoundException("Cannot get the picture tag: " + id));
     }
 
+
     @Override
-    public List<PictureTag> getAllPictureTag() {
-        return pictureTagRepository.findAll();
+    public List<PictureTag> getAllPictureTag(Long id) throws DataNotFoundException {
+        Picture existingPicture = pictureRepository.findById(id)
+                .orElseThrow(()-> new DataNotFoundException
+                        ("Cannot find picture with id: " + id));
+
+        return pictureTagRepository.findAllTagOfPicture(existingPicture.getId());
     }
 
     @Override
-    public PictureTag updatePictureTag(long tagId, PictureTagDTO pictureTagDTO) {
-        return null;
+    public void deleteAllPictureTagofPicture(Long pictureId) throws DataNotFoundException {
+        Picture existingPicture = pictureRepository.findById(pictureId)
+                .orElseThrow(()-> new DataNotFoundException
+                        ("Cannot find picture with id: " + pictureId));
+
+        pictureTagRepository.deleteAllByPictureId(pictureId);
     }
 
     @Override
-    public void deletePictureTag(Long id) {
-        pictureRepository.deleteById(id);
+    public void deleteTagWithPicture(Long pictureId, Long tagId) throws DataNotFoundException {
+        Picture existingPicture = pictureRepository.findById(pictureId)
+                .orElseThrow(()-> new DataNotFoundException
+                        ("Cannot find picture with id: " + pictureId));
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find tag with ID: " + tagId));
+        pictureTagRepository.deleteByPictureIdAndTagName(pictureId, tagId);
     }
+
+
 }

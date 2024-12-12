@@ -20,9 +20,9 @@ public class PictureTag {
 
     @OneToOne
     @JoinColumn(name = "picture_id")
-    private Picture pictureId;
+    private Picture picture;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
-    private Tag tagId;
+    private Tag tag;
 }

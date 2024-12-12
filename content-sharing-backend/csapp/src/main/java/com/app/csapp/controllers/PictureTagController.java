@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,27 +39,40 @@ public class PictureTagController {
         }
     }
 
-    @GetMapping("/picture/{id}") //http://localhost:8088/api/v1/tags
-    public ResponseEntity<List<PictureTag>> getAllPictureTags(
-//            @RequestParam("page") int page,
-//            @RequestParam("limit") int limit
+    @GetMapping("/{pictureId}")
+    public ResponseEntity<?> getAllPictureTags(
+            @PathVariable("pictureId") Long pictureId
     ){
-        List<PictureTag> pictureTag = pictureTagService.getAllPictureTag();
-        return ResponseEntity.ok(pictureTag);
+        try {
+            List<PictureTag> pictureTag = pictureTagService.getAllPictureTag(pictureId);
+            return ResponseEntity.ok(pictureTag);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage()) ;
+        }
+
     }
 
+    @DeleteMapping("/picture/{pictureId}")
+    public ResponseEntity<?> deleteAllPictureTagByPicture(@PathVariable("pictureId") Long pictureId){
+        try {
+            pictureTagService.deleteAllPictureTagofPicture(pictureId);
+            return ResponseEntity.ok("Delete successfully");
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updatePictureTags(
-            @PathVariable Long id,
-            @Valid @RequestBody PictureTagDTO pictureTagDTO
-    ){
-        pictureTagService.updatePictureTag(id, pictureTagDTO);
-        return ResponseEntity.ok("Update Tags successfully");
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePictureTags(@PathVariable Long id){
-        pictureTagService.deletePictureTag(id);
-        return ResponseEntity.ok("Delete successfully");
+
+    @DeleteMapping("/picture/{pictureId}/tag/{tagId}")
+    public ResponseEntity<?> deleteTagWithPicture(
+            @PathVariable("pictureId") Long pictureId,
+            @PathVariable("tagId") Long tagId
+    ){
+        try{
+            pictureTagService.deleteTagWithPicture(pictureId, tagId);
+            return ResponseEntity.ok("Delete tag successfully");
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
