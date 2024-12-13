@@ -43,4 +43,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     boolean existsByUserIdAndBoardNameAndPictureId(@Param("userId") Long userId,
                                                    @Param("boardName") String boardName,
                                                    @Param("pictureId") Long pictureId);
+
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Board b WHERE b.boardName = :boardName AND b.picture.id = :pictureId")
+    boolean existsByBoardNameAndPictureId(@Param("boardName") String boardName,
+                                          @Param("pictureId") Long pictureId);
 }
+

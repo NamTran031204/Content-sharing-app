@@ -7,7 +7,7 @@ import com.app.csapp.models.Board;
 import java.util.List;
 
 public interface IBoardService {
-    Board createBoard(BoardDTO board) throws DataNotFoundException;
+    Board createBoard(BoardDTO board) throws Exception;
     List<Board> getBoardOfUser(Long userId, String boardName) throws DataNotFoundException;
     int updateBoardName(Long userId ,String boardName, BoardDTO boardDTO) throws DataNotFoundException;
     void deleteBoardByUser(Long userId, String boardName ) throws DataNotFoundException;

@@ -3,6 +3,7 @@ package com.app.csapp.controllers;
 
 import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
+import com.app.csapp.exceptions.SameDataException;
 import com.app.csapp.models.Board;
 import com.app.csapp.services.BoardService;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class BoardController {
 
             Board newBoard = boardService.createBoard(boardDTO);
             return ResponseEntity.ok(newBoard);
-        } catch (DataNotFoundException e) {
+        } catch (DataNotFoundException | SameDataException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 

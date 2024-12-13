@@ -130,6 +130,20 @@ public class PictureController {
         }
 
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateImage(
+            @PathVariable("id") Long id,
+            @RequestBody PictureDTO pictureDTO
+    ){
+        try{
+            Picture newPicture = pictureService.updateImage(id, pictureDTO);
+            return ResponseEntity.ok("Update complete");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteImage(@PathVariable Long id){
         pictureService.deleteImage(id);
