@@ -17,13 +17,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.user.id = :userId AND b.boardName = :boardName")
     List<Board> findAllBoardOfUser(@Param("userId") Long userId,@Param("boardName") String boardName);
 
+    @Query("SELECT b FROM Board b WHERE b.picture.id = :pictureId AND b.boardName= :boardName")
+    Board findPictureInBoard(@Param("pictureId") Long pictureId, @Param("boardName") String boardName);
+
     @Modifying
     @Transactional
     @Query("UPDATE Board b SET b.boardName = :newBoardName WHERE b.boardName = :oldBoardName AND b.user.id = :userId")
     int updateBoardName(@Param("userId") Long userId, @Param("oldBoardName") String oldBoardName, @Param("newBoardName") String newBoardName);
 
     @Query("SELECT b FROM Board b WHERE b.boardName = :boardName")
-    Optional<Board> findBoardByName(@Param("boardName") String boardName);
+    List<Board> findBoardByName(@Param("boardName") String boardName);
 
     @Modifying
     @Transactional
@@ -34,4 +37,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Transactional
     @Query("DELETE FROM Board b WHERE b.picture.id = :pictureId AND b.boardName = :boardName AND b.user.id = :userId")
     void deletePictureOfBoard(@Param("userId") Long userId, @Param("pictureId") Long pictureId,@Param("boardName") String boardName);
+
+    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Board b WHERE b.user.id = :userId AND b.boardName = :boardName AND b.picture.id = :pictureId")
+    boolean existsByUserIdAndBoardNameAndPictureId(@Param("userId") Long userId,
+                                                   @Param("boardName") String boardName,
+                                                   @Param("pictureId") Long pictureId);
 }

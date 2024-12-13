@@ -70,7 +70,7 @@ public class BoardController {
     }
 
 
-    @DeleteMapping("/user/{userId}/picture/{pictureId}/board/{boardName}")
+    @DeleteMapping("/user/{userId}/board/{boardName}/picture/{pictureId}")
     public ResponseEntity<String> deletePictureOutOfBoard(
             @PathVariable("userId") Long userId,
             @PathVariable("pictureId") Long pictureId,
