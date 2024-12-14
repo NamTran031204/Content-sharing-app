@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/pictureTags")
+@RequestMapping("${api.prefix}/pictureTags")
 //@Validated
 @RequiredArgsConstructor
 public class PictureTagController {

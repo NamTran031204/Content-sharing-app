@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/v1/follower")
+@RequestMapping("${api.prefix}/follower")
 @RequiredArgsConstructor
 public class FollowerController {
     private final IFollowerService followerService;
@@ -90,7 +90,6 @@ public class FollowerController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @GetMapping("/following_list/{followingId}")

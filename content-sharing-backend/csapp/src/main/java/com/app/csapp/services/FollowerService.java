@@ -7,6 +7,7 @@ import com.app.csapp.repositories.FollowerRepository;
 import com.app.csapp.repositories.UserRepository;
 import com.app.csapp.responses.FollowerResponse;
 import com.app.csapp.responses.UserResponse;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class FollowerService implements IFollowerService{
 
@@ -30,8 +32,10 @@ public class FollowerService implements IFollowerService{
         User follower = userService.getUserById(followerId);
         User following = userService.getUserById(followingId);
         // Kiểm tra nếu lien ket đã tồn tại
-        Long followId = followerRepository.getIdByFollowerAndFollowing(follower, following)
-                .orElseThrow(() -> new DataNotFoundException("khong tim thay"));
+        Optional<Long> followId = followerRepository.getIdByFollowerAndFollowing(follower, following);
+        if (followId.isPresent()){
+            throw new DataIntegrityViolationException("ban da follow nguoi nay roi");
+        }
         Follower newfollower= Follower.builder()
                 .follower(follower)
                 .following(following)

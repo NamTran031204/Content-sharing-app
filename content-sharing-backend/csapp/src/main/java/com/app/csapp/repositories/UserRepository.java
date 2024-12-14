@@ -1,5 +1,6 @@
 package com.app.csapp.repositories;
 
+import com.app.csapp.exceptions.DataNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     // dung de kiem tra xem so dien thoai/email da ton tai trong csdl chua bang .isemty hoac count
     //SELECT * FROM users WHERE phoneNumber=?
-    Page<User> findUserByIdIn(List<Long> Id, Pageable pageable);
+    //Page<User> findUserById(long id) throws DataNotFoundException;
 }

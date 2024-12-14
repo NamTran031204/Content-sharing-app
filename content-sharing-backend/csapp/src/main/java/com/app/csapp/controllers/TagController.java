@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/tags")
+@RequestMapping("${api.prefix}/tags")
 //@Validated
 @RequiredArgsConstructor
 public class TagController {

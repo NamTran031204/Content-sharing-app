@@ -8,6 +8,7 @@ import com.app.csapp.models.Board;
 import com.app.csapp.services.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/boards")
+@RequestMapping("${api.prefix}/boards")
 //@Validated
 @RequiredArgsConstructor
 
 public class BoardController {
     private final BoardService boardService;
+
+    // tạo bảng
     @PostMapping("")
     public ResponseEntity<?> createBoard(
             @Valid @RequestBody BoardDTO boardDTO,
@@ -40,6 +43,7 @@ public class BoardController {
 
     }
 
+    // lấy ra tất cả bảng
     @GetMapping("/user/{userId}/board/{name}")
     public ResponseEntity<?> getAllBoard(
             @PathVariable("userId") Long userId,

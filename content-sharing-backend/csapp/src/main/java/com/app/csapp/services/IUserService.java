@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface IUserService {
     User createUser(UserDTO userDTO) throws DataNotFoundException;
-    String login(String phoneNumber, String password);
+    String login(String phoneNumber, String email, String password) throws Exception;
     User updateUser(long userId, UserDTO userDTO) throws DataNotFoundException;
-    User getUserById(long userId);
-    User updateUserPassword(long userId, UserDTO userDTO);
-    //List<User> getFollowingUserByFollowingId(Long followerId);
-    Page<UserResponse> getAllUser(PageRequest pageRequest);
     void deleteUser(long id);
+
+    User getUserById(long userId);
+    Page<UserResponse> getAllUser(PageRequest pageRequest);
+
 }

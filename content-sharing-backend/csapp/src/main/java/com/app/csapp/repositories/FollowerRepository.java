@@ -18,6 +18,7 @@ public interface FollowerRepository extends JpaRepository<Follower, Long> {
 //    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Followers f WHERE f.follower = :follower AND f.following = :following")
 //    boolean existsByFollowerAndFollowing(@Param("follower") User follower, @Param("following") User following);
 
+    @Query("SELECT f.id FROM Follower f WHERE f.follower = :follower AND f.following = :following")
     Optional<Long> getIdByFollowerAndFollowing(User follower, User following);
 
     @Query("SELECT f.following FROM Follower f WHERE f.follower = :follower")

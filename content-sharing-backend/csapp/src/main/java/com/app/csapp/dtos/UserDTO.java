@@ -44,4 +44,7 @@ public class UserDTO {
     @JsonProperty("create_time")
     private LocalDateTime createTime;
 
+    @JsonProperty("role_id")
+    private long roleId;
+
 }

@@ -21,3 +21,10 @@ spring:
 app:
   base-url: http://localhost:8088
 
+api:
+  prefix: api/v1
+
+jwt:
+  expiration: 2592000 #30days * 24h * 60m * 60s
+  secretKey: nprtI/yUVAZiaZBTM7K1CYqEkrvXOPyeOIFq/1wCFZE=
+

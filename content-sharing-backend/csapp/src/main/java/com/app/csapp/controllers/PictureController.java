@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/pictures")
+@RequestMapping("${api.prefix}/pictures")  //api.prefix = http://localhost:8088/api/v1/picture/id
 @RequiredArgsConstructor
 public class PictureController {
     private final IPictureService pictureService;
@@ -48,7 +48,6 @@ public class PictureController {
         }
 
     }
-
 
     @PostMapping(value = "uploads/{picture_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadPicture(
@@ -119,7 +118,7 @@ public class PictureController {
         return ResponseEntity.ok(pictures);
     }
 
-
+    // lấy ra ảnh theo userId
     @GetMapping("/{id}")
     public ResponseEntity<?> getImage(@PathVariable("id") Long id){
         try {
@@ -149,5 +148,6 @@ public class PictureController {
         pictureService.deleteImage(id);
         return ResponseEntity.ok(String.format("Delete Image id = %d",id));
     }
+
 
 }

@@ -9,14 +9,18 @@ import com.app.csapp.models.User;
 import com.app.csapp.repositories.PictureRepository;
 import com.app.csapp.repositories.ReactRepository;
 import com.app.csapp.repositories.UserRepository;
-import lombok.Builder;
+import com.app.csapp.responses.ReactResponse;
+import com.app.csapp.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -77,4 +81,43 @@ public class ReactService implements IReactService{
         Long reactId = reactRepository.getIdByUserAndPictureAndTypeReact(existingUser, existingPicture, reactDTO.getTypeReact());
         reactRepository.deleteById(reactId);
     }
+
+    @Override
+    public Page<UserResponse> getAllLike(long pictureId, PageRequest pageRequest) throws DataNotFoundException {
+        Picture existingPicture = pictureRepository.findById(pictureId)
+                .orElseThrow(()-> new DataNotFoundException("khong tim thay anh"));
+        Page<UserResponse> userResponses = reactRepository.getUserByPictureAndTypeReact(existingPicture, ReactEnums.LIKE, pageRequest).map(user -> UserResponse.fromUser(user));
+        return reactRepository.getUserByPictureAndTypeReact(existingPicture, ReactEnums.LIKE, pageRequest).map(user -> UserResponse.fromUser(user));
+    }
+
+//    private Page<React> syncFromIdtoReact(List<Long> id, PageRequest pageRequest ){
+//        List<React> reactList = new ArrayList<>();
+//        for(long x: id){
+//            React exxistingReact = reactRepository.findById(x).orElseThrow(()-> new RuntimeException("khong tim thay"));
+//            reactList.add(exxistingReact);
+//        }
+//        return new PageImpl<>(reactList, pageRequest, reactList.size());
+//    }
+    @Override
+    public List<ReactResponse> getAllComment(long pictureId, PageRequest pageRequest) throws DataNotFoundException {
+        Picture existingPicture = pictureRepository.findById(pictureId)
+                .orElseThrow(()-> new DataNotFoundException("khong tim thay anh"));
+        List<Long> reactList = reactRepository.getReactIdByPictureAndTypeReact(existingPicture, ReactEnums.COMMENT);
+        List<ReactResponse> reactResponseList = new ArrayList<>();
+        for (Long reactId: reactList){
+            ReactResponse reactResponse = new ReactResponse();
+            User user = reactRepository.getUserById(reactId);
+            String content = reactRepository.getContentById(reactId);
+            reactResponse.setUserName(user.getuserName());
+            reactResponse.setName(user.getName());
+            reactResponse.setProfilePicture(user.getProfilePicture());
+            reactResponse.setContent(content);
+            reactResponseList.add(reactResponse);
+        }
+        return reactResponseList;
+    }
+
+
+
+
 }

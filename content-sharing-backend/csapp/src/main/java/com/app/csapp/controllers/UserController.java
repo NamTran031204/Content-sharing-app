@@ -5,6 +5,7 @@ import com.app.csapp.dtos.*;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.*;
 import com.app.csapp.repositories.UserRepository;
+import com.app.csapp.responses.UserResponse;
 import com.app.csapp.services.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("${api.prefix}/users")
 public class UserController {
 
     private final IUserService userService;
@@ -113,7 +114,7 @@ public class UserController {
         return uniqueFilename;
     }
 
-    @PutMapping("/infor/{id}")
+    @PutMapping("/update/infor/{id}")
     public ResponseEntity<?> updateUser(
             @Valid @PathVariable("id") long userId,
             @RequestBody UserDTO userDTO,
@@ -136,12 +137,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(
+    public ResponseEntity<?> getUserById(
             @Valid @PathVariable("id") long userId
     ){
         try{
             User existingUser =  userService.getUserById(userId);
-            return null; // sau viet ProductResponse thi cho tra ve ProductResponse
+            return ResponseEntity.ok(UserResponse.fromUser(existingUser)); // sau viet ProductResponse thi cho tra ve ProductResponse
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -149,14 +150,13 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @Valid @RequestBody UserLoginDTO userLoginDTO,
-            BindingResult result
+            @Valid @RequestBody UserLoginDTO userLoginDTO
     ){
         try{
-            // de sau nhe
-            return null;
+            String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getEmail(), userLoginDTO.getPassword());
+            return ResponseEntity.ok(token);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
