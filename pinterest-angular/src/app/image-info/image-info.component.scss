@@ -34,10 +34,18 @@ img.rounded-circle {
   .image{
     width: 100%;
     height: auto;
+    border-radius: 20px;
   }
   .container{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+  .col-md-6{
+    border: 1px solid whitesmoke;
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: whitesmoke;
   }
