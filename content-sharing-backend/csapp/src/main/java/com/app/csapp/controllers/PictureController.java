@@ -30,6 +30,7 @@ import java.util.UUID;
 public class PictureController {
     private final IPictureService pictureService;
 
+    // tao anh, dang anh
     @PostMapping("")
     public ResponseEntity<?> createPicture(
             @Valid @RequestBody PictureDTO pictureDTO,

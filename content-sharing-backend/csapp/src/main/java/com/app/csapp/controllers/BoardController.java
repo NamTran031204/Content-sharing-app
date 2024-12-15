@@ -43,7 +43,7 @@ public class BoardController {
 
     }
 
-    // lấy ra tất cả bảng
+    //Lấy ra tất cả board theo userId
     @GetMapping("/user/{userId}/board/{name}")
     public ResponseEntity<?> getAllBoard(
             @PathVariable("userId") Long userId,

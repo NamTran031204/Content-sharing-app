@@ -39,6 +39,7 @@ public class PictureTagController {
         }
     }
 
+    // hiện tất cả tag theo pictureId
     @GetMapping("/{pictureId}")
     public ResponseEntity<?> getAllPictureTags(
             @PathVariable("pictureId") Long pictureId

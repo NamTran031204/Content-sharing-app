@@ -26,6 +26,7 @@ public class FollowerController {
     private final IFollowerService followerService;
     private final IUserService userService;
 
+    //Follow user
     @PostMapping("/follow")
     public ResponseEntity<?> createFollow(
             @Valid @RequestBody FollowerDTO followerDTO,

@@ -136,6 +136,7 @@ public class UserController {
         }
     }
 
+    // Hiện thông tin user
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(
             @Valid @PathVariable("id") long userId
