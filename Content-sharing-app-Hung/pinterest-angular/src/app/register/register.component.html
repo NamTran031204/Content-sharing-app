@@ -1,0 +1,50 @@
+<app-header></app-header>
+<div class="container d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+      <h3 class="card-title text-center mb-4">Đăng ký</h3>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Họ và Tên -->
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Họ và Tên</label>
+          <input type="text" id="fullName" formControlName="fullName" class="form-control" placeholder="Nhập họ và tên" />
+          <div *ngIf="registerForm.controls['fullName'].invalid && registerForm.controls['fullName'].touched" class="text-danger small">
+            Họ và tên là bắt buộc.
+          </div>
+        </div>
+  
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" formControlName="email" class="form-control" placeholder="Nhập email" />
+          <div *ngIf="registerForm.controls['email'].invalid && registerForm.controls['email'].touched" class="text-danger small">
+            Email không hợp lệ.
+          </div>
+        </div>
+  
+        <!-- Mật khẩu -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Mật khẩu</label>
+          <input type="password" id="password" formControlName="password" class="form-control" placeholder="Nhập mật khẩu" />
+          <div *ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].touched" class="text-danger small">
+            Mật khẩu phải có ít nhất 6 ký tự.
+          </div>
+        </div>
+  
+        <!-- Đồng ý điều khoản -->
+        <div class="form-check mb-3">
+          <input type="checkbox" id="acceptTerms" formControlName="acceptTerms" class="form-check-input" />
+          <label for="acceptTerms" class="form-check-label">Tôi đồng ý với điều khoản và chính sách</label>
+          <div *ngIf="registerForm.controls['acceptTerms'].invalid && registerForm.controls['acceptTerms'].touched" class="text-danger small">
+            Bạn cần đồng ý với điều khoản.
+          </div>
+        </div>
+  
+        <!-- Nút Đăng ký -->
+        <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">
+          Đăng ký
+        </button>
+      </form>
+    </div>
+  </div>
+
+<app-footer></app-footer>
