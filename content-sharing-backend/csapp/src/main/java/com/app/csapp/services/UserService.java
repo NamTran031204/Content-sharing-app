@@ -35,19 +35,12 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(UserDTO userDTO) throws DataNotFoundException {
-        String phoneNumber = userDTO.getPhoneNumber();
         String email = userDTO.getEmail();
 
         // Kiểm tra bắt buộc phải có email hoặc số điện thoại
-        if (phoneNumber == null && email == null) {
+        if (email == null) {
             throw new DataIntegrityViolationException("Either phone number or email is required");
         }
-
-        // Kiểm tra nếu số điện thoại đã tồn tại
-        if (phoneNumber != null && userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new DataIntegrityViolationException("Phone number already exists");
-        }
-
         // Kiểm tra nếu email đã tồn tại
         if (email != null && userRepository.existsByEmail(email)) {
             throw new DataIntegrityViolationException("Email already exists");
@@ -63,7 +56,6 @@ public class UserService implements IUserService {
                 .name(userDTO.getName())
                 .userPassword(encodedPassword)
                 .email(userDTO.getEmail())
-                .phoneNumber(userDTO.getPhoneNumber())
                 .profilePicture(userDTO.getProfilePicture())
                 .description(userDTO.getDescription())
                 .role(role)
@@ -72,16 +64,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(String phoneNumber, String email, String password) throws Exception { // tra ve token
-        Optional<User> optionalUser;
-        String identifier;
-        if (phoneNumber == null){
-            optionalUser = userRepository.findByEmail(email);
-            identifier = email;
-        }else {
-            optionalUser = userRepository.findByPhoneNumber(phoneNumber);
-            identifier = phoneNumber;
-        }
+    public String login(String email, String password) throws Exception { // tra ve token
+        Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if(optionalUser.isEmpty()) {
             throw new DataNotFoundException("Invalid phonenumber/password");
@@ -90,7 +74,7 @@ public class UserService implements IUserService {
 
         // tra ve token qua component JwtTokenUtil
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                identifier, password,
+                email, password,
                 existingUser.getAuthorities() // lay ra quyen cua user
         );
         // authenticate with java spring
@@ -130,8 +114,10 @@ public class UserService implements IUserService {
             if (userDTO.getPassword().equals(existingUser.getUserPassword())){
                 throw new SamePasswordException("mat khau da bi trung");
             }
-            existingUser.setUserPassword(userDTO.getPassword());
+            String password = userDTO.getPassword();
         }
+
+        //String encodedPassword = passwordEncoder.encode(password); // ma hoa mat khau
         userRepository.save(existingUser);
         return existingUser;
     }

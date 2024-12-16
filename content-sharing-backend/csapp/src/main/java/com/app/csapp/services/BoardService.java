@@ -89,4 +89,12 @@ public class BoardService implements IBoardService {
                 //.orElseThrow(()->new DataNotFoundException("Cannot find board with name: " + boardName));
         boardRepository.deleteBoardOfUser(userId, boardName);
     }
+
+    @Override
+    public List<Picture> getAllPictureInBoard(Long userId, String boardName) throws DataNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new DataNotFoundException("Cannot find user"));
+        List<Board> boardList = boardRepository.findBoardByName(boardName);
+        return boardRepository.findAllPicturesInBoardByName(user.getId(), boardName);
+    }
 }

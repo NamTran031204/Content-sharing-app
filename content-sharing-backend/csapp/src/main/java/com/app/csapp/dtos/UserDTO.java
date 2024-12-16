@@ -18,9 +18,6 @@ public class UserDTO {
     @NotBlank(message = "name cannot be blank")
     private String name;
 
-    @JsonProperty("phone_number")
-    private String phoneNumber;
-
     @JsonProperty("email")
     private String email;
 

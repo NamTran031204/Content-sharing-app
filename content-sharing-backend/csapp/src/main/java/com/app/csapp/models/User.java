@@ -30,9 +30,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "email", length = 30)
     private String email;
 
-    @Column(name = "phone_number", length = 30)
-    private String phoneNumber;
-
     @Column(name = "name", length = 100)
     private String name;
 
@@ -50,9 +47,8 @@ public class User extends BaseEntity implements UserDetails {
     private com.app.csapp.models.Role role;
 
     public String getuserName(){
-        return this.userName;
+        return userName;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,9 +64,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        if (phoneNumber != null){
-            return phoneNumber;
-        }
         return email;
     }
 

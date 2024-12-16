@@ -78,7 +78,6 @@ public class PictureController {
             pictureDTO.setImageUrl(filename);
             Picture updatedPicture = pictureService.updateImage(
                     existingPicture.getId(),
-//                        pictureDTO
                     PictureDTO.builder()
                             .imageUrl(filename)
                             .imageDescription(existingPicture.getImageDescription())
@@ -120,11 +119,11 @@ public class PictureController {
     }
 
     // lấy ra ảnh theo userId
-    @GetMapping("/{id}")
+    @GetMapping("/getPicture/{id}")
     public ResponseEntity<?> getImage(@PathVariable("id") Long id){
         try {
             Picture picture = pictureService.getImageById(id);
-            return ResponseEntity.ok(picture);
+            return ResponseEntity.ok("picture");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

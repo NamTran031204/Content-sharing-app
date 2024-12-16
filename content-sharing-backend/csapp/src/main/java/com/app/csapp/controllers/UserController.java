@@ -53,9 +53,6 @@ public class UserController {
             if(!userDTO.getPassword().equals(userDTO.getRetypePassword())){
                 return ResponseEntity.badRequest().body("mat khau xac thuc khong dung");
             }
-//            java.nio.file.Path uploadDir = Paths.get("uploads");
-//            java.nio.file.Path destination = Paths.get(uploadDir.toString(), "default_profile_image.jpg");
-            // doan nay may nua xem sync anh tu url nhu nao thi sua tiep
             userDTO.setProfilePicture("default_profile_image.jpg");
             userService.createUser(userDTO);
             return ResponseEntity.ok("register successfully");
@@ -86,7 +83,7 @@ public class UserController {
 
 
             User userImage = userService.updateUser(
-                    existingUser.getId(),
+                    userId,
                     UserDTO.builder()
                         .profilePicture(imageName)
                         .build()
@@ -154,7 +151,7 @@ public class UserController {
             @Valid @RequestBody UserLoginDTO userLoginDTO
     ){
         try{
-            String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getEmail(), userLoginDTO.getPassword());
+            String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

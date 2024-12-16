@@ -53,6 +53,12 @@ public class PictureTagController {
 
     }
 
+    //Lấy top 5 tag
+    @GetMapping("/topTag")
+    public ResponseEntity<?> getTopTag(){
+        return ResponseEntity.ok(pictureTagService.getTop5Tags());
+    }
+
     @DeleteMapping("/picture/{pictureId}")
     public ResponseEntity<?> deleteAllPictureTagByPicture(@PathVariable("pictureId") Long pictureId){
         try {

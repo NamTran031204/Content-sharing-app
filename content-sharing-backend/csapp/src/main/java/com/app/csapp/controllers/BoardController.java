@@ -5,6 +5,7 @@ import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.exceptions.SameDataException;
 import com.app.csapp.models.Board;
+import com.app.csapp.models.Picture;
 import com.app.csapp.services.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,21 @@ public class BoardController {
 
     }
 
+    //lấy ra tất cả ảnh trong board
+    @GetMapping("/user/{userId}/board/{name}/picture")
+    public ResponseEntity<?> getAllPictureInBoard(
+            @PathVariable("userId") Long userId,
+            @PathVariable("name") String name
+    ){
+        try{
+            //System.out.println(name);
+            List<Picture> pictures = boardService.getAllPictureInBoard(userId, name);
+            return ResponseEntity.ok(pictures);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 
     @PutMapping("/user/{userId}/board/{boardName}")
     public ResponseEntity<String> updateBoard(

@@ -1,6 +1,7 @@
 package com.app.csapp.repositories;
 
 import com.app.csapp.models.Board;
+import com.app.csapp.models.Picture;
 import com.app.csapp.models.PictureTag;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,5 +49,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "FROM Board b WHERE b.boardName = :boardName AND b.picture.id = :pictureId")
     boolean existsByBoardNameAndPictureId(@Param("boardName") String boardName,
                                           @Param("pictureId") Long pictureId);
+
+    @Query("SELECT b.picture FROM Board b WHERE b.user.id = :userId AND b.boardName = :boardName")
+    List<Picture> findAllPicturesInBoardByName(@Param("userId") Long userId, @Param("boardName") String boardName);
 }
 

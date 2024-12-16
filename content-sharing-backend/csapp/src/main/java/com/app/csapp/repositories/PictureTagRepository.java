@@ -26,4 +26,14 @@ public interface PictureTagRepository extends JpaRepository<PictureTag, Long> {
     @Transactional
     @Query("DELETE FROM PictureTag pt WHERE pt.picture.id = :pictureId")
     void deleteAllByPictureId(@Param("pictureId") Long pictureId);
+
+    @Query(value = """
+        SELECT t.tag_name AS tagName, COUNT(pt.tag_id) AS pictureCount
+        FROM picture_tag pt
+        JOIN tags t ON pt.tag_id = t.id
+        GROUP BY pt.tag_id, t.tag_name
+        ORDER BY pictureCount DESC
+        LIMIT 5
+        """, nativeQuery = true)
+    List<Object[]> findTop5Tags();
 }

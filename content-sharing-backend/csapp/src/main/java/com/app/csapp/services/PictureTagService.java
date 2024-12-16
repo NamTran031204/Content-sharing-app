@@ -2,6 +2,7 @@ package com.app.csapp.services;
 
 
 import com.app.csapp.dtos.PictureTagDTO;
+import com.app.csapp.dtos.TopTagDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.models.Picture;
 import com.app.csapp.models.PictureTag;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +63,12 @@ public class PictureTagService implements IPictureTagService {
                         ("Cannot find picture with id: " + id));
 
         return pictureTagRepository.findAllTagOfPicture(existingPicture.getId());
+    }
+
+    public List<TopTagDTO> getTop5Tags() {
+        return pictureTagRepository.findTop5Tags().stream()
+                .map(obj -> new TopTagDTO((String) obj[0], ((Number) obj[1]).longValue()))
+                .collect(Collectors.toList());
     }
 
     @Override
