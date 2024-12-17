@@ -28,8 +28,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                // chan tat ca cac request khong co token
+
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> {
                     requests
@@ -43,6 +42,8 @@ public class WebSecurityConfig {
                             .requestMatchers(
                                     GET, String.format("%s/tags", apiPrefix)).permitAll()
                             .requestMatchers(
+                                    GET, String.format("%s/pictureTags/picture/*", apiPrefix)).permitAll()
+                            .requestMatchers(
                                     GET, String.format("%s/reacts", apiPrefix)).permitAll()
                             .requestMatchers(
                                     GET, String.format("%s/pictures", apiPrefix)).permitAll()
@@ -52,7 +53,10 @@ public class WebSecurityConfig {
                                     GET, String.format("%s/boards", apiPrefix)).permitAll()
                             .requestMatchers(POST, "/api/v1/pictures/uploads/**").permitAll()
                             .anyRequest().authenticated();
-                });
+
+                })
+        .csrf(AbstractHttpConfigurer::disable);
+        // chan tat ca cac request khong co token
         return http.build();
     }
 }

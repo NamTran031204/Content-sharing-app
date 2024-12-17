@@ -53,7 +53,7 @@ public class FollowerService implements IFollowerService{
         Long followId = followerRepository.getIdByFollowerAndFollowing(follower,following)
                 .orElseThrow(() -> new DataNotFoundException("khong tim thay moi lien he"));
 
-        followerRepository.deleteById(followerId);
+        followerRepository.deleteById(followId);
     }
 
     @Override

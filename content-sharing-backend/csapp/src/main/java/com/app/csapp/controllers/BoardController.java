@@ -37,7 +37,7 @@ public class BoardController {
             }
 
             Board newBoard = boardService.createBoard(boardDTO);
-            return ResponseEntity.ok(newBoard);
+            return ResponseEntity.ok("newBoard");
         } catch (DataNotFoundException | SameDataException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

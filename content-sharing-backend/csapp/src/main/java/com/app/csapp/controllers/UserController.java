@@ -70,7 +70,6 @@ public class UserController {
             //lay ra userId
             User existingUser = userService.getUserById(userId);
 
-            // kiem tra xem file day len co rong khong va file co noi dung khong
             if (image == null && image.isEmpty()) {
                 return ResponseEntity.badRequest().body("Vui lòng tải lên một ảnh");
             }

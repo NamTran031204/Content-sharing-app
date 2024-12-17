@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 400px">
+      <h3 class="card-header text-center">Đăng nhập</h3>
+      <div class="card-body">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              placeholder="Nhập email"
+            />
+            <div
+              *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched"
+              class="text-danger"
+            >
+              Email không hợp lệ.
+            </div>
+          </div>
+  
+          <!-- Mật khẩu -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Nhập mật khẩu"
+            />
+            <div
+              *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+              class="text-danger"
+            >
+              Mật khẩu không được để trống.
+            </div>
+          </div>
+          <div class="form-check mb-3">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="rememberMe"
+              formControlName="rememberMe"
+            />
+            <label class="form-check-label" for="rememberMe">
+              Ghi nhớ đăng nhập
+            </label>
+          </div>
+          <!-- Nút Đăng nhập -->
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="loginForm.invalid"
+          >
+            Đăng nhập
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+<app-footer></app-footer>

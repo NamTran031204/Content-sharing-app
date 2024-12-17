@@ -77,7 +77,7 @@ public class PictureController {
             // Update the existing picture with the new image URL and details
             pictureDTO.setImageUrl(filename);
             Picture updatedPicture = pictureService.updateImage(
-                    existingPicture.getId(),
+                    pictureId,
                     PictureDTO.builder()
                             .imageUrl(filename)
                             .imageDescription(existingPicture.getImageDescription())

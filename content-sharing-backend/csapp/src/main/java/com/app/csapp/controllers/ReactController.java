@@ -42,7 +42,7 @@ public class ReactController {
                 return ResponseEntity.ok("Share successful. Link: " + newReact.getContent());
             }
 
-            return ResponseEntity.ok(newReact);
+            return ResponseEntity.ok("newReact");
         } catch (DataNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

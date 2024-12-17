@@ -58,6 +58,7 @@ public class PictureService implements IPictureService {
     @Override
     public Picture updateImage(long imageId, PictureDTO pictureDTO) throws Exception {
         Picture exsitingPicture = getImageById(imageId);
+        exsitingPicture.setImageUrl(pictureDTO.getImageUrl());
         exsitingPicture.setTitle(pictureDTO.getTitle());
         exsitingPicture.setImageDescription(pictureDTO.getImageDescription());
         return pictureRepository.save(exsitingPicture);
