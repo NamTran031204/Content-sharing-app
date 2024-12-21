@@ -29,7 +29,7 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       //console.log('Đăng ký thành công', this.registerForm.value);
       
-      debugger
+      
       const registerDTO: RegisterDTO = {
         "name": this.registerForm.value.name,
         "email": this.registerForm.value.email,

@@ -150,8 +150,8 @@ public class UserController {
             @Valid @RequestBody UserLoginDTO userLoginDTO
     ){
         try{
-            String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(token);
+            User existingUser = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+            return ResponseEntity.ok(existingUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

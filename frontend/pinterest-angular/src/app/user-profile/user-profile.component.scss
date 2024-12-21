@@ -1,0 +1,124 @@
+.user-profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+  
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: #f7f7f7;
+      border-radius: 8px;
+  
+      .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+      }
+  
+      .user-info {
+        margin-left: 20px;
+  
+        .username {
+          font-size: 2em;
+          margin: 0;
+          font-weight: bold;
+        }
+  
+        .user-bio {
+          color: #666;
+          font-size: 1em;
+          margin: 5px 0;
+        }
+  
+        .user-stats {
+          margin: 10px 0;
+          span {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 1em;
+            color: #333;
+  
+            strong {
+              color: #007bff;
+            }
+          }
+        }
+  
+        .follow-btn {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          font-size: 1em;
+          border-radius: 5px;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+    }
+  
+    .profile-nav {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+  
+      .nav-item {
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+        cursor: pointer;
+        font-size: 1em;
+        color: #555;
+        border-bottom: 2px solid transparent;
+  
+        &.active {
+          font-weight: bold;
+          color: #007bff;
+          border-color: #007bff;
+        }
+  
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+  
+    .content-section {
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+  
+        .image-card {
+          background: #fff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+  
+          &:hover {
+            transform: scale(1.05);
+          }
+  
+          img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+          }
+  
+          .image-title {
+            padding: 10px;
+            text-align: center;
+            font-size: 1em;
+            color: #333;
+          }
+        }
+      }
+    }
+  }

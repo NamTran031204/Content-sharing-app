@@ -21,7 +21,7 @@ public class UserResponse {
 
     public static UserResponse fromUser(User user){
         UserResponse userResponse = UserResponse.builder()
-                .userName(user.getuserName())
+                .userName(user.getUserName())
                 .name(user.getName())
                 .description(user.getDescription())
                 .profilePicture(user.getProfilePicture())

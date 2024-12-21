@@ -108,7 +108,7 @@ public class ReactService implements IReactService{
             ReactResponse reactResponse = new ReactResponse();
             User user = reactRepository.getUserById(reactId);
             String content = reactRepository.getContentById(reactId);
-            reactResponse.setUserName(user.getuserName());
+            reactResponse.setUserName(user.getUserName());
             reactResponse.setName(user.getName());
             reactResponse.setProfilePicture(user.getProfilePicture());
             reactResponse.setContent(content);

@@ -11,10 +11,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageInfoComponent } from './image-info/image-info.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { LucideAngularModule, Heart } from 'lucide-angular';
 
 //search
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 //search
 
 @NgModule({
@@ -22,8 +25,7 @@ import { MatInputModule } from '@angular/material/input';
     HomeComponent, 
     HeaderComponent,
     FooterComponent, 
-    LoginComponent, RegisterComponent, AppComponent, ImageInfoComponent,  
-    
+    LoginComponent, RegisterComponent, AppComponent, ImageInfoComponent, UserProfileComponent,  
 
   ],
   imports: [
@@ -32,6 +34,8 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    LucideAngularModule.pick({ Heart }),
 
     //search
     MatFormFieldModule,
@@ -45,6 +49,7 @@ import { MatInputModule } from '@angular/material/input';
     //LoginComponent,
     //RegisterComponent
     //ProfileComponent
+    // ImageInfoComponent
   ]
 })
 export class AppModule { 

@@ -14,4 +14,5 @@ import java.util.List;
 public class UserListResponse {
     private List<UserResponse> users;
     private int totalPages;
+    private int totalUsers;
 }

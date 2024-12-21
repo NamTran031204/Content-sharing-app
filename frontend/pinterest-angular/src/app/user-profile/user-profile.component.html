@@ -1,0 +1,35 @@
+<div class="user-profile-container">
+   
+    <div class="profile-header">
+      <img class="avatar" src="https://via.placeholder.com/150" alt="User Avatar" />
+      <div class="user-info">
+        <h1 class="username">John Doe</h1>
+        <p class="user-bio">Photographer & Graphic Designer</p>
+        <div class="user-stats">
+          <span><strong>120</strong> Followers</span>
+          <span><strong>34</strong> Boards</span>
+          <span><strong>540</strong> Images</span>
+        </div>
+        <button class="follow-btn">Follow</button>
+      </div>
+    </div>
+  
+    
+    <div class="profile-nav">
+      <button class="nav-item active">Uploads</button>
+      <button class="nav-item">Boards</button>
+      <button class="nav-item">Favorites</button>
+    </div>
+  
+    
+    <div class="content-section">
+      <div class="image-grid">
+     
+        <div class="image-card" *ngFor="let image of images">
+          <img [src]="image.url" [alt]="image.title" />
+          <div class="image-title">{{ image.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,7 +1,9 @@
+//Duy
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/enviroments/environment';
+import { ReactDTO } from '../dtos/reacts/react.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +13,36 @@ export class ReactService {
 
   constructor(private http: HttpClient) {}
 
-  createReact(reactDTO: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, reactDTO);
+  like(reactDTO: ReactDTO): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    reactDTO.type_react = 0;
+    return this.http.post(`${this.apiUrl}`, reactDTO, { headers });
   }
 
-  deleteReact(pictureId: number, reactDTO: any): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${pictureId}`, { body: reactDTO });
+  unlike(reactDTO: ReactDTO, picture_id: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    reactDTO.type_react = 0;
+    return this.http.delete(`${this.apiUrl}/${picture_id}`, { headers, body: reactDTO });
   }
 
-  getReacts(pictureId: number, reactType: number, page: number, limit: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${pictureId}/${reactType}?page=${page}&limit=${limit}`);
+  comment(reactDTO: ReactDTO): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    reactDTO.type_react = 2;
+    return this.http.post(`${this.apiUrl}`, reactDTO, { headers });
   }
+  
+  getReacts(pictureId: number, page: number, limit: number): Observable<any> {
+    const params = new HttpParams()
+          .set('page', page.toString())
+          .set('limit', limit.toString());
+    return this.http.get(`${this.apiUrl}/${pictureId}/2`, {params});
+  }
+
+  getTotalLike(pictureId: number, page: number, limit: number): Observable<any> {
+    const params = new HttpParams()
+          .set('page', page.toString())
+          .set('limit', limit.toString());
+    return this.http.get(`${this.apiUrl}/${pictureId}/0`, {params});
+  }
+
 }
