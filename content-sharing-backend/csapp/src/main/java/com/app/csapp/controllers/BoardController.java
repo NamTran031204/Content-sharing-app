@@ -1,12 +1,12 @@
 package com.app.csapp.controllers;
 
-
 import com.app.csapp.dtos.BoardDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.exceptions.SameDataException;
 import com.app.csapp.models.Board;
 import com.app.csapp.models.Picture;
 import com.app.csapp.services.BoardService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("${api.prefix}/boards")
 //@Validated
 @RequiredArgsConstructor
-
+@Tag(name = "Board Management", description = "APIs for managing user boards and collections")
 public class BoardController {
     private final BoardService boardService;
 

@@ -74,11 +74,13 @@ public class ReactController {
                 Page<UserResponse> userPage = reactService.getAllLike(pictureId, pageRequest);
                 int totalPages = userPage.getTotalPages();
                 List<UserResponse> users = userPage.getContent();
+                for (UserResponse user: users){
+
+                }
                 return ResponseEntity.ok(UserListResponse.builder()
                         .users(users)
                         .totalPages(totalPages)
-                        .totalUsers((int)userPage.getTotalElements())
-                        .build());
+                        .build().getUsers());
             }
             if(reactId == 2){
                 List<ReactResponse> reactResponses = reactService.getAllComment(pictureId, pageRequest);

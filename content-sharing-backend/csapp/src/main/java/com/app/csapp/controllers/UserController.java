@@ -7,6 +7,14 @@ import com.app.csapp.models.*;
 import com.app.csapp.repositories.UserRepository;
 import com.app.csapp.responses.UserResponse;
 import com.app.csapp.services.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +38,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/users")
+@Tag(name = "User Management", description = "APIs for user registration, login, and profile management")
 public class UserController {
 
     private final IUserService userService;
 
     @PostMapping("/register")
+    @Operation(
+        summary = "Register new user",
+        description = "Create a new user account with email, username and password"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User registered successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data or email already exists")
+    })
     public ResponseEntity<?> createUser(
             // @RequestBody: lấy dữ liệu từ thẻ body của request(postman)
             // @Valid: kiểm tra dữ liệu trước khi vào controller, nếu không hợp lệ thì trả về lỗi 400: bad request
+            @Parameter(description = "User registration data") 
             @Valid @RequestBody UserDTO userDTO,
             BindingResult result                // tra ve cac loi trong Valid
     ){
@@ -62,8 +80,20 @@ public class UserController {
     }
 
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+        summary = "Update user profile image",
+        description = "Upload and update user's profile picture"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Profile image updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid file or user not found"),
+        @ApiResponse(responseCode = "415", description = "Unsupported file type")
+    })
     public ResponseEntity<?> updateUserImage(
+            @Parameter(description = "User ID") 
             @Valid @PathVariable("id") long userId,
+            @Parameter(description = "Image file to upload")
             @RequestParam("files") MultipartFile image
     ){
         try{
@@ -111,8 +141,19 @@ public class UserController {
     }
 
     @PutMapping("/update/infor/{id}")
+    @Operation(
+        summary = "Update user information",
+        description = "Update user profile information (name, description, etc.)"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User information updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data or user not found")
+    })
     public ResponseEntity<?> updateUser(
+            @Parameter(description = "User ID") 
             @Valid @PathVariable("id") long userId,
+            @Parameter(description = "Updated user information")
             @RequestBody UserDTO userDTO,
             BindingResult result
     ){
@@ -134,7 +175,17 @@ public class UserController {
 
     // Hiện thông tin user
     @GetMapping("/{id}")
+    @Operation(
+        summary = "Get user by ID",
+        description = "Retrieve user information by user ID"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found successfully"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> getUserById(
+            @Parameter(description = "User ID") 
             @Valid @PathVariable("id") long userId
     ){
         try{
@@ -146,19 +197,38 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Operation(
+        summary = "User login",
+        description = "Authenticate user and return JWT token"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login successful, returns JWT token"),
+        @ApiResponse(responseCode = "400", description = "Invalid email or password")
+    })
     public ResponseEntity<?> login(
+            @Parameter(description = "User login credentials")
             @Valid @RequestBody UserLoginDTO userLoginDTO
     ){
         try{
-            User existingUser = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(existingUser);
+            String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+            return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+        summary = "Delete user",
+        description = "Delete user account by ID"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
     public ResponseEntity<?> deleteUser(
+            @Parameter(description = "User ID to delete")
             @Valid @PathVariable("id") Long userId
     ){
         try {

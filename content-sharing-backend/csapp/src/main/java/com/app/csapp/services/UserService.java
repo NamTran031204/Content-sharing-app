@@ -1,5 +1,6 @@
 package com.app.csapp.services;
 
+import com.app.csapp.components.JwtTokenUtil;
 import com.app.csapp.dtos.UserDTO;
 import com.app.csapp.exceptions.DataNotFoundException;
 import com.app.csapp.exceptions.SamePasswordException;
@@ -12,8 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,7 +27,11 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public User createUser(UserDTO userDTO) throws DataNotFoundException {
@@ -39,11 +49,12 @@ public class UserService implements IUserService {
         Role role = roleRepository.findById(userDTO.getRoleId())
                 .orElseThrow(() -> new DataNotFoundException("Role not found"));
 
-        String password = userDTO.getPassword(); // ma hoa mat khau
+        String password = userDTO.getPassword();
+        String encodedPassword = passwordEncoder.encode(password); // ma hoa mat khau
         User newUser = User.builder()
                 .userName(userDTO.getUserName())
                 .name(userDTO.getName())
-                .userPassword(password)
+                .userPassword(encodedPassword)
                 .email(userDTO.getEmail())
                 .profilePicture(userDTO.getProfilePicture())
                 .description(userDTO.getDescription())
@@ -53,17 +64,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User login(String email, String password) throws Exception { // tra ve token
+    public String login(String email, String password) throws Exception { // tra ve token
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if(optionalUser.isEmpty()) {
             throw new DataNotFoundException("Invalid phonenumber/password");
         }
         User existingUser = optionalUser.get();
-        if (existingUser.getUserPassword().equals(password)){
-            return existingUser;
-        }
-        else throw new RuntimeException("password is not correct");
+
+        // tra ve token qua component JwtTokenUtil
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                email, password,
+                existingUser.getAuthorities() // lay ra quyen cua user
+        );
+        // authenticate with java spring
+        authenticationManager.authenticate(authenticationToken);
+        return jwtTokenUtil.generateToken(existingUser);
     }
 
 
@@ -95,13 +111,13 @@ public class UserService implements IUserService {
         if(userDTO.getProfilePicture() != null)
             existingUser.setProfilePicture(userDTO.getProfilePicture());
         if (userDTO.getPassword() != null) {
-            if (userDTO.getPassword().equals(existingUser.getUserPassword())){
+            if (passwordEncoder.matches(userDTO.getPassword(), existingUser.getUserPassword())) {
                 throw new SamePasswordException("mat khau da bi trung");
             }
-            String password = userDTO.getPassword();
+            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            existingUser.setUserPassword(encodedPassword);
         }
 
-        //String encodedPassword = passwordEncoder.encode(password); // ma hoa mat khau
         userRepository.save(existingUser);
         return existingUser;
     }

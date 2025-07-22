@@ -3,6 +3,12 @@ package com.app.csapp.controllers;
 import com.app.csapp.dtos.PictureDTO;
 import com.app.csapp.models.Picture;
 import com.app.csapp.services.IPictureService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,12 +33,23 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.prefix}/pictures")  //api.prefix = http://localhost:8088/api/v1/picture/id
 @RequiredArgsConstructor
+@Tag(name = "Picture Management", description = "APIs for managing pictures and image uploads")
 public class PictureController {
     private final IPictureService pictureService;
 
     // tao anh, dang anh
     @PostMapping("")
+    @Operation(
+        summary = "Create new picture",
+        description = "Create a new picture entry with metadata"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Picture created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     public ResponseEntity<?> createPicture(
+            @Parameter(description = "Picture metadata")
             @Valid @RequestBody PictureDTO pictureDTO,
             BindingResult result
     ){
@@ -51,9 +68,23 @@ public class PictureController {
     }
 
     @PostMapping(value = "uploads/{picture_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+        summary = "Upload picture file",
+        description = "Upload an image file for an existing picture entry"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Image uploaded successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid file or picture not found"),
+        @ApiResponse(responseCode = "413", description = "File size too large"),
+        @ApiResponse(responseCode = "415", description = "Unsupported file type")
+    })
     public ResponseEntity<?> uploadPicture(
+            @Parameter(description = "Picture metadata")
             @Valid @ModelAttribute PictureDTO pictureDTO,
+            @Parameter(description = "Picture ID")
             @PathVariable("picture_id") Long pictureId,
+            @Parameter(description = "Image file to upload")
             @RequestParam("file") MultipartFile file
     ){
         //MultipartFile file = pictureDTO.getFile();
@@ -107,8 +138,17 @@ public class PictureController {
     }
 
     @GetMapping("") //http://localhost:8088/api/v1/pictures
+    @Operation(
+        summary = "Get all pictures",
+        description = "Retrieve paginated list of all pictures"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Pictures retrieved successfully")
+    })
     public ResponseEntity<List<Picture>> getAllImage(
+            @Parameter(description = "Page number (0-based)")
             @RequestParam("Page") int page,
+            @Parameter(description = "Number of items per page")
             @RequestParam("Limit") int limit
     ){
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("createTime").descending());
@@ -120,7 +160,18 @@ public class PictureController {
 
     // lấy ra ảnh theo userId
     @GetMapping("/getPicture/{id}")
-    public ResponseEntity<?> getImage(@PathVariable("id") Long id){
+    @Operation(
+        summary = "Get picture by ID",
+        description = "Retrieve a specific picture by its ID"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Picture found successfully"),
+        @ApiResponse(responseCode = "400", description = "Picture not found")
+    })
+    public ResponseEntity<?> getImage(
+            @Parameter(description = "Picture ID")
+            @PathVariable("id") Long id
+    ){
         try {
             Picture picture = pictureService.getImageById(id);
             return ResponseEntity.ok("picture");
@@ -131,8 +182,19 @@ public class PictureController {
     }
 
     @PutMapping("/update/{id}")
+    @Operation(
+        summary = "Update picture",
+        description = "Update picture metadata and information"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Picture updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data or picture not found")
+    })
     public ResponseEntity<?> updateImage(
+            @Parameter(description = "Picture ID")
             @PathVariable("id") Long id,
+            @Parameter(description = "Updated picture data")
             @RequestBody PictureDTO pictureDTO
     ){
         try{
@@ -144,7 +206,19 @@ public class PictureController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteImage(@PathVariable Long id){
+    @Operation(
+        summary = "Delete picture",
+        description = "Delete a picture by its ID"
+    )
+    @SecurityRequirement(name = "Bearer Authentication")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Picture deleted successfully"),
+        @ApiResponse(responseCode = "400", description = "Picture not found")
+    })
+    public ResponseEntity<String> deleteImage(
+            @Parameter(description = "Picture ID to delete")
+            @PathVariable Long id
+    ){
         pictureService.deleteImage(id);
         return ResponseEntity.ok(String.format("Delete Image id = %d",id));
     }

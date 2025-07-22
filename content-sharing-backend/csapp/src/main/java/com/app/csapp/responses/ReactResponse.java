@@ -25,7 +25,7 @@ public class ReactResponse {
     public static ReactResponse fromReact(React react){
 
         ReactResponse reactResponse = ReactResponse.builder()
-                .userName(react.getUser().getUserName())
+                .userName(react.getUser().getuserName())
                 .name(react.getUser().getName())
                 .profilePicture(react.getUser().getProfilePicture())
                 .content(react.getContent())
